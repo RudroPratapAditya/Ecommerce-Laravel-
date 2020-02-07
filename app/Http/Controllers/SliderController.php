@@ -37,9 +37,16 @@ class SliderController extends Controller
    		if($success){
    			$data['slider_image']=$image_url;
 
-   			DB::table('tbl_slider')->insert($data);
-   			Session::put('message','Slider added succesfully!!!');
-   			return Redirect::to('/add-slider');
+   			$slider=DB::table('tbl_slider')->insert($data);
+   			if ($slider) {
+         $notification=array(
+                'messege'=>'Slider added Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-slider')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
 
    			// echo "<pre>";
    			// print_r($data);
@@ -49,9 +56,16 @@ class SliderController extends Controller
    	}
 
    	$data['slider_image']='';
-   			DB::table('tbl_slider')->insert($data);
-   			Session::put('message','Slider added succesfully without image!!!');
-   			return Redirect::to('/add-slider');
+   		$slide =	DB::table('tbl_slider')->insert($data);
+   		if ($slide) {
+         $notification=array(
+                'messege'=>'Slider added successfully without image !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-slider')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
 
@@ -73,20 +87,34 @@ class SliderController extends Controller
     public function inactive_slider($slider_id)
    {
 
-   	DB::table('tbl_slider')
+   $slide =	DB::table('tbl_slider')
    	->where('slider_id',$slider_id)->update(['publication_status'=>0]);
-   	Session::put('message','Slider Inactivated Successfully !!');
-   	return Redirect::to('/all-slider');
+    if ($slide) {
+         $notification=array(
+                'messege'=>'Slider deactivated successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-slider')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
 
    public function active_slider($slider_id)
    {
 
-    DB::table('tbl_slider')
+    $slide=DB::table('tbl_slider')
     ->where('slider_id',$slider_id)->update(['publication_status'=>1]);
-    Session::put('message','Slider Activated Successfully !!');
-    return Redirect::to('/all-slider');
+    if ($slide) {
+         $notification=array(
+                'messege'=>'Slider activated successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-slider')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
    public function delete_slider($slider_id)
@@ -94,12 +122,19 @@ class SliderController extends Controller
 
    	//echo $category_id;
 
-   	DB::table('tbl_slider')
+   $slide =	DB::table('tbl_slider')
    	->where('slider_id',$slider_id)
    	->delete();
 
-   	Session::put('message','Slider Deleted Successfully!!!');
-   	return Redirect::to('/all-slider');
+   	if ($slide) {
+         $notification=array(
+                'messege'=>'Slider deleted successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-slider')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
 
    }
 
@@ -119,48 +154,5 @@ class SliderController extends Controller
 }
 
 	
-	public function update_slider(Request $request,$slider_id)
-   {
-
-//     
-
- echo $slider_id;
-
-   	// $data['publication_status']=$request->publication_status;
-//    	$image=$request->file('slider_image');
-
-
-//       // dd($request->hasFile('product_image'));
-      
-//    	if($image) {
-//    		$image_name=str_random(20);
-//    		$ext=strtolower($image->getClientOriginalExtension());
-//    		$image_full_name=$image_name.'.'.$ext;
-//    		$upload_path='slider/';
-//    		$image_url=$upload_path.$image_full_name;
-//    		$success=$image->move($upload_path,$image_full_name);
-//    		if($success){
-//    			$data['slider_image']=$image_url;
-
-//     // value pass hosse kina check korar jonno ei command use hoi
-//     // print_r($data);
-
-//     DB::table('tbl_slider') 
-//     ->where('slider_id',$slider_id)
-//     ->update($data);
-
-//     Session::put('message','Slider updated successfully with image!!!!');
-//     return Redirect::to('/all-slider');
-
-//    }
-
-
-// }
-
-// $data['slider_image']='';
-//    			DB::table('tbl_slider')->insert($data);
-//    			Session::put('message','Slider Updated succesfully without image!!!');
-//    			return Redirect::to('/all-slider');
-
-}
+	
 }

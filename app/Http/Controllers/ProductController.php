@@ -44,18 +44,32 @@ class ProductController extends Controller
    		if($success){
    			$data['product_image']=$image_url;
 
-   			DB::table('tbl_products')->insert($data);
-   			Session::put('message','Product added succesfully!!!');
-   			return Redirect::to('/add-product');
+   		$product =	DB::table('tbl_products')->insert($data);
+   			if ($product) {
+         $notification=array(
+                'messege'=>'Product Added Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
 
   
    		}
    	}
 
    	$data['product_image']='';
-   			DB::table('tbl_products')->insert($data);
-   			Session::put('message','Product added succesfully without image!!!');
-   			return Redirect::to('/add-product');
+   		$pro =	DB::table('tbl_products')->insert($data);
+   			  if ($pro) {
+         $notification=array(
+                'messege'=>'Product added Successfully without Image !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
 
@@ -91,10 +105,17 @@ class ProductController extends Controller
 
     
 
-      DB::table('tbl_products')
+      $pro=DB::table('tbl_products')
       ->where('product_id',$product_id)->update(['publication_status'=>0]);
-      Session::put('message','Product Inactivated Successfully !!');
-      return Redirect::to('/all-product');
+       if ($pro) {
+         $notification=array(
+                'messege'=>'Product Deactivated Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
 
@@ -102,10 +123,17 @@ class ProductController extends Controller
    public function active_product($product_id)
    {
 
-      DB::table('tbl_products')
+      $pro=DB::table('tbl_products')
       ->where('product_id',$product_id)->update(['publication_status'=>1]);
-      Session::put('message','Product Activated Successfully !!');
-      return Redirect::to('/all-product');
+      if ($pro) {
+         $notification=array(
+                'messege'=>'Product Activated Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
 
@@ -118,10 +146,17 @@ class ProductController extends Controller
    public function delete_product($product_id)
    {
 
-      DB::table('tbl_products')->where('product_id',$product_id)
+      $pro = DB::table('tbl_products')->where('product_id',$product_id)
       ->delete();
-      Session::put('message','Product Deleted Successfully!!!');
-      return Redirect::to('/all-product');
+      if ($pro) {
+         $notification=array(
+                'messege'=>'Product Deleted Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
    }
 
      public function edit_product($product_id){
@@ -169,18 +204,59 @@ class ProductController extends Controller
             $success=$image->move($upload_path,$image_full_name);
             if ($success) {
                 $data['product_image']=$image_url;
-                DB::table('tbl_products')
+              $pro =  DB::table('tbl_products')
                     ->where('product_id',$product_id)
                     ->update($data);
-                Session::put('message', 'Product updated successfully!!');
-                return Redirect::to('/all-product');
+                 if ($pro) {
+         $notification=array(
+                'messege'=>'Product Updated Successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect()->route('admin.all-product')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
             }
         }
         
 
     }
 
+    public function show_all_product(){
+      $all_product=DB::table('tbl_products')
+       ->join('category_tbl','tbl_products.category_id','=','category_tbl.category_id')
+       ->join('manufacture_tbl','tbl_products.manufacture_id','=','manufacture_tbl.manufacture_id')
+       ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
+       ->paginate(9);
+       
+       
+       return view('show_all_product',compact('all_product'));
+    }
 
+
+
+public function view_single_product($product_id){
+  // $single_product=DB::table('tbl_products')
+  //      ->join('category_tbl','tbl_products.category_id','=','category_tbl.category_id')
+  //      ->join('manufacture_tbl','tbl_products.manufacture_id','=','manufacture_tbl.manufacture_id')
+  //      ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
+  //      ->first();
+       
+  //  return view('view_single_product',compact('single_product'));   
+  
+  $product_by_details=DB::table('tbl_products')
+         ->join('category_tbl','tbl_products.category_id','=','category_tbl.category_id')
+         ->join('manufacture_tbl','tbl_products.manufacture_id','=','manufacture_tbl.manufacture_id')
+         ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
+         ->where('tbl_products.product_id',$product_id)
+         ->where('tbl_products.publication_status',1)
+         ->first();
+
+         $manage_product_by_details=view('view_single_product')
+     ->with('product_by_details',$product_by_details);
+     return view('layout')
+     ->with('pages.show_product_details',$manage_product_by_details); 
+}
  
 }
 

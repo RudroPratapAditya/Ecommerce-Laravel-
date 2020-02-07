@@ -32,9 +32,20 @@ class ManufactureController extends Controller
     //print_r($data);
     //echo "</pre>";
 
-    DB::table('manufacture_tbl')->insert($data);
-    Session::put('message','Manufacture added successfully !!');
-    return Redirect::to('/add-manufacture');
+    $manufacture=DB::table('manufacture_tbl')->insert($data);
+    if ($manufacture) {
+                 $notification=array(
+                 'messege'=>'Manufacture Added Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-manufacture')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'error'
+                  );
+                 return Redirect()->back();
+             } 
 
    }
 
@@ -59,32 +70,65 @@ class ManufactureController extends Controller
 
    	//echo $category_id;
 
-   	DB::table('manufacture_tbl')
+   	$manufacture=DB::table('manufacture_tbl')
    	->where('manufacture_id',$manufacture_id)
    	->delete();
 
-   	Session::put('message','Manufacture Deleted Successfully!!!');
-   	return Redirect::to('/all-manufacture');
+   	if ($manufacture) {
+                 $notification=array(
+                 'messege'=>'Manufacture Deleted Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-manufacture')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'error'
+                  );
+                 return Redirect()->back();
+             } 
 
    }
 
    public function inactive_manufacture($manufacture_id)
    {
 
-    DB::table('manufacture_tbl')
+   $manufacture= DB::table('manufacture_tbl')
     ->where('manufacture_id',$manufacture_id)->update(['publication_status'=>0]);
-    Session::put('message','Manufacture Inactivated Successfully !!');
-    return Redirect::to('/all-manufacture');
+    if ($manufacture) {
+                 $notification=array(
+                 'messege'=>'Manufacture Deactivated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-manufacture')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'error'
+                  );
+                 return Redirect()->back();
+             } 
    }
 
 
    public function active_manufacture($manufacture_id)
    {
 
-    DB::table('manufacture_tbl')
+   $manufacture = DB::table('manufacture_tbl')
     ->where('manufacture_id',$manufacture_id)->update(['publication_status'=>1]);
-    Session::put('message','Manufacture Activated Successfully !!');
-    return Redirect::to('/all-manufacture');
+    if ($manufacture) {
+                 $notification=array(
+                 'messege'=>'Manufacture Activated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-manufacture')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'error'
+                  );
+                 return Redirect()->back();
+             } 
    }
 
 
@@ -116,12 +160,23 @@ class ManufactureController extends Controller
     // value pass hosse kina check korar jonno ei command use hoi
     // print_r($data);
 
-    DB::table('manufacture_tbl') 
+   $manufacture = DB::table('manufacture_tbl') 
     ->where('manufacture_id',$manufacture_id)
     ->update($data);
 
-    Session::put('message','Manufacture updated successfully!!!!');
-    return Redirect::to('/all-manufacture');
+    if ($manufacture) {
+                 $notification=array(
+                 'messege'=>'Manufacture Updated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-manufacture')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'error'
+                  );
+                 return Redirect()->back();
+             } 
 
    }
 

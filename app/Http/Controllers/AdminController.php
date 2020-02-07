@@ -35,7 +35,7 @@ class AdminController extends Controller
 
         		Session::put('admin_name',$result->admin_name);
         		Session::put('admin_id',$result->admin_id);
-        		return Redirect::to('/dashboard');
+        		return Redirect()->route('/dashboard');
         	}else{
         		Session::put('message','Email or Password are Invalid');
         		return Redirect::to('/admin');

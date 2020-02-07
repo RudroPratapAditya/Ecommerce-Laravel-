@@ -17,10 +17,17 @@
 	
 	<!-- start: CSS -->
 	<link id="bootstrap-style" href="{{asset('backend/css/bootstrap.min.css')}}" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" href="{{asset('backend/css/datatables/jquery.dataTables.min.css')}}">
+	<script src="{{asset('backend/css/datatables/dataTables.bootstrap.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{asset('backend/css/datatables/datatables.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{asset('backend/css/datatables/jquery.dataTables.js')}}" type="text/javascript" charset="utf-8" async defer></script>
+	<script src="{{asset('backend/css/datatables/jquery.dataTables.min.js')}}" type="text/javascript" charset="utf-8" async defer></script>
 	<link href="{{asset('backend/css/bootstrap-responsive.min.css')}}" rel="stylesheet">
 	<link id="base-style" href="{{asset('backend/css/style.css')}}" rel="stylesheet">
 	<link id="base-style-responsive" href="{{asset('backend/css/style-responsive.css')}}" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800&amp;subset=latin,cyrillic-ext,latin-ext' rel='stylesheet' type='text/css'>
+
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
 	<!-- end: CSS -->
 	
 
@@ -45,7 +52,7 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</a>
-				<a class="brand" href="{{URL::to('/dashboard')}}"><span>Aditya Chakma</span></a>
+				
 								
 				<!-- start: Header Menu -->
 				<div class="nav-no-collapse header-nav">
@@ -55,14 +62,14 @@
 						<!-- start: User Dropdown -->
 						<li class="dropdown">
 							<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-								<i class="halflings-icon white user"></i> {{ Session::get('admin_name') }}
+								{{-- <i class="halflings-icon white user"></i> --}}<img src="{{URL::to('backend/adi.jpg')}}" alt="" style="height: 25px;width: 25px;border-radius: 20px"> {{ Session::get('admin_name') }}
 								<span class="caret"></span>
 							</a>
 							<ul class="dropdown-menu">
 								<li class="dropdown-menu-title">
  									<span>Account Settings</span>
 								</li>
-								<li><a href="https://www.facebook.com/adityachakmaa"><i class="halflings-icon user"></i> Profile</a></li>
+								<li><a href="{{route('all-contact')}}"><i class="halflings-icon user"></i> Profile</a></li>
 								<li><a href="{{URL::to('logout')}}"><i class="halflings-icon off"></i> Logout</a></li>
 							</ul>
 						</li>
@@ -83,21 +90,33 @@
 			<div id="sidebar-left" class="span2">
 				<div class="nav-collapse sidebar-nav">
 					<ul class="nav nav-tabs nav-stacked main-menu">
-						<li><a href="{{URL::to('/dashboard')}}"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
+						<li><a href="{{route('/dashboard')}}"><i class="icon-bar-chart"></i><span class="hidden-tablet"> Dashboard</span></a></li>
 
-						<li><a href="{{URL::to('/all-category')}}"><i class="icon-envelope"></i><span class="hidden-tablet"> All Category</span></a></li>
+					<li>
+						<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Category </span><span class="label label-important"></span></a>
+							<ul>
+								<li><a class="submenu" href="{{route('admin.all-category')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All Category </span></a></li>
+								<li><a class="submenu" href="{{route('admin.add-category')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> Add Category</span></a></li>
+								
+							</ul>	
+						</li>
 
-						<li><a href="{{URL::to('/add-category')}}"><i class="icon-tasks"></i><span class="hidden-tablet"> Add category</span></a></li>
 
-						<li><a href="{{('/all-manufacture')}}"><i class="icon-eye-open"></i><span class="hidden-tablet">All manufacture</span></a></li>
-
-						<li><a href="{{URL::to('/add-manufacture')}}"><i class="icon-dashboard"></i><span class="hidden-tablet"> Add Manufacture</span></a></li>
+					
+						<li>
+						<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Manufacture </span><span class="label label-important"></span></a>
+							<ul>
+								<li><a class="submenu" href="{{route('admin.add-manufacture')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Manufacture </span></a></li>
+								<li><a class="submenu" href="{{route('admin.all-manufacture')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Manufacture</span></a></li>
+								
+							</ul>	
+						</li>
 
 						<li>
 							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Products</span><span class="label label-important"> New </span></a>
 							<ul>
-								<li><a class="submenu" href="{{URL::to('/add-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add products </span></a></li>
-								<li><a class="submenu" href="{{URL::to('/all-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All products</span></a></li>
+								<li><a class="submenu" href="{{route('admin.add-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add product </span></a></li>
+								<li><a class="submenu" href="{{route('admin.all-product')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All products</span></a></li>
 								
 							</ul>	
 						</li>
@@ -105,18 +124,42 @@
 						<li>
 							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Slider</span><span class="label label-important"></span></a>
 							<ul>
-								<li><a class="submenu" href="{{URL::to('/add-slider')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Slider</span></a></li>
-								<li><a class="submenu" href="{{URL::to('/all-slider')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Slider</span></a></li>
+								<li><a class="submenu" href="{{route('admin.add-slider')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Slider</span></a></li>
+								<li><a class="submenu" href="{{route('admin.all-slider')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Slider</span></a></li>
+								
+							</ul>	
+						</li>
+                         
+
+                         <li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Order Information </span><span class="label label-important"></span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/manage-order')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">All Order</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/all-confirmed-order')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Confirmed Order</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/all-pending-order')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Pending Order</span></a></li>
+								
+							</ul>	
+						</li>
+						
+
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Contact</span><span class="label label-important"></span></a>
+							<ul>
+								<li><a class="submenu" href="{{route('add-contact')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Contact</span></a></li>
+								<li><a class="submenu" href="{{route('all-contact')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Contact</span></a></li>
 								
 							</ul>	
 						</li>
 
-						<li><a href="{{URL::to('/manage-order')}}"><i class="icon-list-alt"></i><span class="hidden-tablet"> Manage Order</span></a></li>
-
-						<li><a href="#"><i class="icon-font"></i><span class="hidden-tablet">Shop Name</span></a></li>
-
 						
-						<li><a href="#"><i class="icon-picture"></i><span class="hidden-tablet">Delivery Men</span></a></li>
+						<li>
+							<a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> Supplier</span><span class="label label-important"></span></a>
+							<ul>
+								<li><a class="submenu" href="{{URL::to('/add-supplier')}}"><i class="icon-file-alt"></i><span class="hidden-tablet">Add Supplier</span></a></li>
+								<li><a class="submenu" href="{{URL::to('/all-supplier')}}"><i class="icon-file-alt"></i><span class="hidden-tablet"> All Supplier</span></a></li>
+								
+							</ul>	
+						</li>
 
 						
 					</ul>
@@ -148,7 +191,7 @@
 
 		<p>
 			<span style="text-align:left;float:left">&copy; 2018 <a href="https://www.facebook.com/adityachakmaa" alt="Bootstrap Themes">All Rights Reserved</a></span>
-			<span class="hidden-phone" style="text-align:right;float:right">Designed By: <a href="https://www.facebook.com/adityachakmaa" alt="Bootstrap Admin Templates">Aditya Chakma</a></span>
+			<span class="hidden-phone" style="text-align:right;float:right">Designed By: <a href="https://www.facebook.com/adityachakmaa" alt="">Aditya Chakma</a></span>
 		</p>
 
 	</footer>
@@ -213,18 +256,50 @@
 		<script src="{{asset('backend/js/bootbox.min.js')}}"></script>
 
 
-<script>
-       $(document).on("click", "#delete", function(e) {
-         e.preventDefault();
-         var link = $(this).attr("href");
-         bootbox.confirm("Are you want to delete!!", function(confirmed) {
-           
-           if (confirmed) {
-             window.location.href = link;
-           };
-         });
-       });
-</script>
+
+
+ <script>  
+         $(document).on("click", "#delete", function(e){
+             e.preventDefault();
+             var link = $(this).attr("href");
+                swal({
+                  title: "Are you Want to delete?",
+                  text: "Once Delete, This will be Permanently Delete!",
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+                })
+                .then((willDelete) => {
+                  if (willDelete) {
+                       window.location.href = link;
+                  } else {
+                    swal("Safe Data!");
+                  }
+                });
+            });
+    </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+ <script>
+      @if(Session::has('messege'))
+        var type="{{Session::get('alert-type','info')}}"
+        switch(type){
+            case 'info':
+                 toastr.info("{{ Session::get('messege') }}");
+                 break;
+            case 'success':
+                toastr.success("{{ Session::get('messege') }}");
+                break;
+            case 'warning':
+                toastr.warning("{{ Session::get('messege') }}");
+                break;
+            case 'error':
+                toastr.error("{{ Session::get('messege') }}");
+                break;
+        }
+      @endif
+    </script>
 	
 </body>
 

@@ -12,6 +12,9 @@ Session_start();
 
 class CheckoutController extends Controller
 {
+
+   
+
     public function login_check(){
     	return view('pages.login');
     }
@@ -27,7 +30,7 @@ class CheckoutController extends Controller
 
     	$customer_id=DB::table('tbl_customer')
     	->insertGetId($data);
-
+       Session::put('message','Congrates!!! You have successfully signed up..complete next steps!');
     	Session::put('customer_id',$customer_id);
     	Session::put('customer_first_name',$request->customer_first_name);
     	Session::put('customer_last_name',$request->customer_last_name);
@@ -81,9 +84,11 @@ public function customer_login(Request $request){
  ->where('password',$password)
  ->first();
 if ($result) {
+    Session::put('message','Successfully Enter !!');
     Session::put('customer_id',$result->customer_id);
     return Redirect::to('/checkout');
 }else{
+  Session::put('message','Email or Password is not correct !!');
     return Redirect::to('/login-check');
 
 }
@@ -150,6 +155,8 @@ else{
 
 public function manage_order(){
 
+      
+
     $all_order_info=DB::table('tbl_order')
   
          ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id')
@@ -166,24 +173,84 @@ public function manage_order(){
   // return view('admin.all_product');
 
    }
-   public function view_order(){
-   $order_by_id=DB::table('tbl_order')
+
+   public function AllConfirmedOrder(){
+
+      
+
+    $all_confirmed_order=DB::table('tbl_order')
   
          ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id')
-         ->join('tbl_order_details','tbl_order.order_id','=','tbl_order_details.order_id')
-         ->join('tbl_shipping','tbl_order.shipping_id','=','tbl_shipping.shipping_id')
          
-         ->select('tbl_order.*','tbl_order_details.*','tbl_shipping.*','tbl_customer.*')
-        ->first();
-      // echo "<pre>";
-      // print_r($order_by_id);
-      // echo "</pre>";
+         ->select('tbl_order.*','tbl_customer.customer_first_name','tbl_customer.customer_last_name')
+         ->where('order_status',1)
+        ->get();
+      
 
-      $view_order=view('admin.view_order')
-     ->with('order_by_id',$order_by_id);
+      $all_confirmed_order=view('admin.all_confirmed_order')
+     ->with('all_confirmed_order',$all_confirmed_order);
      return view('admin_layout')
-     ->with('admin.view_order',$view_order);
+     ->with('admin.all_confirmed_order',$all_confirmed_order);
+
+  
+
    }
+
+      public function AllPendingOrder(){
+
+      
+
+    $all_pending_order=DB::table('tbl_order')
+  
+         ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id')
+         
+         ->select('tbl_order.*','tbl_customer.customer_first_name','tbl_customer.customer_last_name')
+         ->where('order_status',0)
+        ->get();
+      
+
+      $all_pending_order=view('admin.all_pending_order')
+     ->with('all_pending_order',$all_pending_order);
+     return view('admin_layout')
+     ->with('admin.all_pending_order',$all_pending_order);
+
+  
+
+   }
+
+
+   public function view_order($order_id){
+  
+       $order_by_id=DB::table('tbl_order')
+              ->join('tbl_customer','tbl_order.customer_id','=','tbl_customer.customer_id')
+              ->join('tbl_order_details','tbl_order.order_id','=','tbl_order_details.order_id')
+              ->join('tbl_shipping','tbl_order.shipping_id','=','tbl_shipping.shipping_id')
+              ->select('tbl_order.*','tbl_order_details.*','tbl_shipping.*','tbl_customer.*')
+              ->where('tbl_order.order_id',$order_id)
+              ->get();
+
+
+       $view_order=view('admin.view_order')
+               ->with('order_by_id',$order_by_id);
+       return view('admin_layout')
+               ->with('admin.view_order',$view_order); 
+   }
+
+public function delete_order($order_id){
+  $order=DB::table('tbl_order')
+    ->where('order_id',$order_id)
+    ->delete();
+
+      if ($order) {
+         $notification=array(
+                'messege'=>'Order deleted successfully !!!',
+                'alert-type'=>'success'
+                 );
+               return Redirect::to('manage-order')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
+}
 
 
 

@@ -14,6 +14,7 @@ class CategoryController extends Controller
    public function index(){
     $this->AdminAuthCheck();
 
+
    	return view('admin.add_category');
    }
 
@@ -49,9 +50,21 @@ class CategoryController extends Controller
     //print_r($data);
     //echo "</pre>";
 
-    DB::table('category_tbl')->insert($data);
-    Session::put('message','Category added successfully !!');
-    return Redirect::to('/add-category');
+   $cat = DB::table('category_tbl')->insert($data);
+    if ($cat) {
+                 $notification=array(
+                 'messege'=>'Category Inserted Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-category')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->back();
+             } 
+   
 
 
    }
@@ -59,19 +72,41 @@ class CategoryController extends Controller
    public function inactive_category($category_id)
    {
 
-   	DB::table('category_tbl')
+   	$cat=DB::table('category_tbl')
    	->where('category_id',$category_id)->update(['publication_status'=>0]);
-   	Session::put('message','Category Inactivated Successfully !!');
-   	return Redirect::to('/all-category');
+    if ($cat) {
+                 $notification=array(
+                 'messege'=>'Category Deactivated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                  return Redirect()->route('admin.all-category')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->back();
+             } 
    }
 
    public function active_category($category_id)
    {
 
-   	DB::table('category_tbl')
+   	$cat=DB::table('category_tbl')
    	->where('category_id',$category_id)->update(['publication_status'=>1]);
-   	Session::put('message','Category Activated Successfully !!');
-   	return Redirect::to('/all-category');
+   	 if ($cat) {
+                 $notification=array(
+                 'messege'=>'Category Activated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-category')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->back();
+             } 
    }
 
    public function edit_category($category_id)
@@ -102,12 +137,23 @@ class CategoryController extends Controller
    	// value pass hosse kina check korar jonno ei command use hoi
    	// print_r($data);
 
-   	DB::table('category_tbl') 
+   	$cat=DB::table('category_tbl') 
    	->where('category_id',$category_id)
    	->update($data);
 
-   	Session::put('message','Category updated successfully!!!!');
-   	return Redirect::to('/all-category');
+   	if ($cat) {
+                 $notification=array(
+                 'messege'=>'Category Updated Successfully !!! ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->route('admin.all-category')->with($notification);                      
+             }else{
+              $notification=array(
+                 'messege'=>'error ',
+                 'alert-type'=>'success'
+                  );
+                 return Redirect()->back();
+             } 
 
    }
 
@@ -116,12 +162,19 @@ class CategoryController extends Controller
 
    	//echo $category_id;
 
-   	DB::table('category_tbl')
+   $del_cat =	DB::table('category_tbl')
    	->where('category_id',$category_id)
    	->delete();
 
-   	Session::put('message','Category Deleted Successfully!!!');
-   	return Redirect::to('/all-category');
+   if ($del_cat) {
+         $notification=array(
+                'messege'=>'Category Deleted Successfully !!!',
+                'alert-type'=>'error'
+                 );
+                return Redirect()->route('admin.all-category')->with($notification);
+      }else{
+        return Redirect()->back();
+      }
 
    }
 

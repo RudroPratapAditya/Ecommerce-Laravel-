@@ -1,6 +1,15 @@
 @extends('admin_layout')
 @section('admin_content')
 
+<ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="{{route('/dashboard')}}">Home</a>
+                    <i class="icon-angle-right"></i> 
+                </li>
+                
+            </ul>
+
     <div class="row-fluid sortable">
         <div class="box span12">
             <div class="box-header" data-original-title>
@@ -91,8 +100,8 @@
                      
                        
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Update Product</button>
-                            <button type="reset" class="btn">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
+                           
                         </div>
                     </fieldset>
                 </form>

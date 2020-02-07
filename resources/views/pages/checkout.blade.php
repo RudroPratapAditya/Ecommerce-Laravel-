@@ -5,7 +5,15 @@
 		<section id="cart_items">
 		<div class="container">
 			
-
+<p class="alert-success">
+						<?php
+					$message=Session::get('message');
+					if('message'){
+						echo $message;
+						Session::put('message',null);
+					}
+						?>
+				</p>
 			<div class="register-req">
 				<p>Fillup this form for your shipping confirmation</p>
 			</div><!--/register-req-->

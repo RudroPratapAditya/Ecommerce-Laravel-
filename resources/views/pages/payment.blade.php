@@ -108,7 +108,7 @@
 					 <form action="{{URL::to('/order-place')}}" method="post">
 						{{csrf_field()}}
 				
-				<input  type="radio" name="payment_method" value="handcash">Hand Cash<br>
+				<input  type="radio" name="payment_method" value="handcash">Bkash<br>
 				<input  type="radio" name="payment_method" value="card">Dabit Card<br>
 				<input  type="radio" name="payment_method" value="paypal">paypal<br>
 				<input class="btn btn-success pull-left btn-fyi" type="submit"  value="Done">

@@ -5,13 +5,10 @@
 <ul class="breadcrumb">
 				<li>
 					<i class="icon-home"></i>
-					<a href="">Home</a>
+					<a href="{{route('/dashboard')}}">Home</a>
 					<i class="icon-angle-right"></i> 
 				</li>
-				<li>
-					<i class="icon-edit"></i>
-					<a href="">Update Category</a>
-				</li>
+				
 			</ul>
 			
 			<div class="row-fluid sortable">
@@ -46,8 +43,8 @@
 							
 
 							<div class="form-actions">
-							  <button type="submit" class="btn btn-primary">Save</button>
-							  <button type="reset" class="btn">Cancel</button>
+							  <button type="submit" class="btn btn-primary">Update</button>
+							  
 							</div>
 						  </fieldset>
 						</form>   

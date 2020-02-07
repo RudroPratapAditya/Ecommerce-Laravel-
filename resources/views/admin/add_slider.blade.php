@@ -5,14 +5,12 @@
 <ul class="breadcrumb">
 				<li>
 					<i class="icon-home"></i>
-					<a href="">Home</a>
+					<a href="{{route('/dashboard')}}">Home</a>
 					<i class="icon-angle-right"></i> 
 				</li>
-				<li>
-					<i class="icon-edit"></i>
-					<a href="">Add slider</a>
-				</li>
+				
 			</ul>
+			 <a href="{{route('admin.all-slider')}}" class="btn btn-lg btn-block btn-warning">All Slider</a>
 			
 			<div class="row-fluid sortable">
 				<div class="box span12">

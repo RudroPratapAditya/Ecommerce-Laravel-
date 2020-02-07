@@ -26,9 +26,8 @@ public function home(){
          ->join('category_tbl','tbl_products.category_id','=','category_tbl.category_id')
          ->join('manufacture_tbl','tbl_products.manufacture_id','=','manufacture_tbl.manufacture_id')
          ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
-         ->where('tbl_products.publication_status',1)
-         ->limit(9)
-        ->get();
+         // ->where('tbl_products.publication_status',1)
+         ->paginate(9);
       // echo "<pre>";
       // print_r($all_product_info);
       // echo "</pre>";
@@ -37,7 +36,7 @@ public function home(){
 
       $manage_published_product=view('pages.home_content')
      ->with('all_published_product',$all_published_product);
-     return view('layout')
+     return view('main')
      ->with('pages.home_content',$manage_published_product);
 
   // return view('admin.all_product');
@@ -56,8 +55,7 @@ public function home(){
          ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
          ->where('category_tbl.category_id',$category_id)
          ->where('tbl_products.publication_status',1)
-         ->limit(18)
-        ->get();
+         ->paginate(9);
       
 
       $manage_product_by_category=view('pages.show_product_by_category')
@@ -78,8 +76,7 @@ public function home(){
          ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
          ->where('manufacture_tbl.manufacture_id',$manufacture_id)
          ->where('tbl_products.publication_status',1)
-         ->limit(18)
-        ->get();
+         ->paginate(9);
       // echo "<pre>";
       // print_r($all_product_info);
       // echo "</pre>";
@@ -102,7 +99,7 @@ public function home(){
          ->join('manufacture_tbl','tbl_products.manufacture_id','=','manufacture_tbl.manufacture_id')
          ->select('tbl_products.*','category_tbl.category_name','manufacture_tbl.manufacture_name')
          ->where('tbl_products.product_id',$product_id)
-         ->where('tbl_products.publication_status',1)
+         // ->where('tbl_products.publication_status',1)
          ->first();
 
          $manage_product_by_details=view('pages.show_product_details')
